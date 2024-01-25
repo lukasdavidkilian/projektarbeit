@@ -26,3 +26,11 @@ class Food:
             )
         return False
 
+    def dominant_macronutrient(self):
+        max_value = max(self.protein, self.fat, self.carbs)
+        if max_value == self.protein:
+            return 'protein'
+        elif max_value == self.fat:
+            return 'fat'
+        else:
+            return 'carbs'

@@ -12,16 +12,17 @@ class MealPlan:
     carbs: int
 
     def __init__(self, food, protein_goal, fat_goal, carbohydrate_goal, amounts_dictionary):
+        self.amounts_dictionary = amounts_dictionary
         self.food = food
+        #self.food = sorted(food, key=lambda item: item.protein * self.amounts_dictionary[item.name], reverse=True)
         self.protein_goal = protein_goal
         self.fat_goal = fat_goal
         self.carbohydrate_goal = carbohydrate_goal
-        self.amounts_dictionary = amounts_dictionary
         self.protein = sum(food.protein * self.amounts_dictionary[food.name] for food in self.food)
         self.fat = sum(food.fat * self.amounts_dictionary[food.name] for food in self.food)
         self.carbs = sum(food.carbs * self.amounts_dictionary[food.name] for food in self.food)
         meal_plans.append(self)
-        print(self)
+        #print(self)
 
 
 
@@ -52,11 +53,43 @@ class MealPlan:
 
         # Format the goals and totals for the macro nutrients
         macro_str = (
-            "SOLL: P {:.0f}g F {:.0f}g C {:.0f}g\n"
-            " IST: P {:.0f}g F {:.0f}g C {:.0f}g"
-        ).format(self.protein_goal, self.fat_goal, self.carbohydrate_goal, protein, fat, carbs)
+            "IST  : P {:3.0f}g F {:3.0f}g C {:3.0f}g\n"
+            "SOLL : P {:3.0f}g F {:3.0f}g C {:3.0f}g\n"
+            "I/S  : P {:3.0%} F {:3.0%} C {:3.0%}"
+        ).format(
+            protein, fat, carbs,
+            self.protein_goal, self.fat_goal, self.carbohydrate_goal,
+            protein / self.protein_goal, fat / self.fat_goal, carbs / self.carbohydrate_goal
+        )
 
         # Return the meal plan string and macro nutrient string
         return f"\n{meal_plan_str}\n{macro_str}\n"
+
+    def update_macros(self):
+        self.protein = 0
+        self.fat = 0
+        self.carbs = 0
+
+        for food in self.food:
+            amount = self.amounts_dictionary[food.name]
+            self.protein += food.protein * amount
+            self.fat += food.fat * amount
+            self.carbs += food.carbs * amount
+
+    def add_food(self, food, amount):
+        if food not in self.food and food.name not in self.amounts_dictionary:
+            self.food.append(food)
+            self.amounts_dictionary[food.name] = amount
+            self.update_macros
+        else:
+            print(f"{food.name} is already in the meal plan.")
+
+    def remove_food(self, food):
+        if food in self.food:
+            self.food.remove(food)
+            del self.amounts_dictionary[food.name]
+            self.update_macros()
+        else:
+            print(f"{food.name} not found in the meal plan.")
 
 
