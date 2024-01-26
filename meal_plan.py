@@ -93,3 +93,9 @@ class MealPlan:
             print(f"{food.name} not found in the meal plan.")
 
 
+    # TODO: Implement
+    def sort(self):
+        self.food = sorted(self.food, key=lambda item: item.protein * self.amounts_dictionary[item.name], reverse=True)
+        return self
+
+
