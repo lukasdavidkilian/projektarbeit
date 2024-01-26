@@ -46,10 +46,14 @@ class MealPlan:
                 f"{food.name:<{max_name_length}}\n"
             )
 
-        # Calculate the total amount of each nutrient in the meal plan
-        protein = sum(food.protein * self.amounts_dictionary[food.name] for food in self.food)
-        fat = sum(food.fat * self.amounts_dictionary[food.name] for food in self.food)
-        carbs = sum(food.carbs * self.amounts_dictionary[food.name] for food in self.food)
+        protein = 0
+        fat = 0
+        carbs = 0
+
+        for food in self.food:
+            protein += food.protein * self.amounts_dictionary[food.name]
+            fat += food.fat * self.amounts_dictionary[food.name]
+            carbs += food.carbs * self.amounts_dictionary[food.name]
 
         # Format the goals and totals for the macro nutrients
         macro_str = (
@@ -92,8 +96,16 @@ class MealPlan:
         else:
             print(f"{food.name} not found in the meal plan.")
 
+    def is_within_tolerance(self):
+        tolerance = {'protein': 10, 'fat': 10, 'carbs': 10}
+        protein_deviation = abs(self.protein - self.protein_goal)
+        fat_deviation = abs(self.fat - self.fat_goal)
+        carbs_deviation = abs(self.carbs - self.carbohydrate_goal)
 
-    # TODO: Implement
+        return protein_deviation <= tolerance['protein'] and fat_deviation <= tolerance['fat'] and carbs_deviation <= \
+            tolerance['carbs']
+
+    # TODO: sort function
     def sort(self):
         self.food = sorted(self.food, key=lambda item: item.protein * self.amounts_dictionary[item.name], reverse=True)
         return self

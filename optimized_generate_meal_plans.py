@@ -195,6 +195,7 @@ def swap_food(food_list, meal_plan: MealPlan):
     # Select a food to add
     available_foods = [food for food in food_list if
                        food.name not in meal_plan.amounts_dictionary and food != food_to_remove]
+
     if not available_foods:
         return meal_plan
 
@@ -258,7 +259,12 @@ def optimized_generate_meal_plans(food_list, goals):
     unsorted_plan = iterative_selection(food_list, meal_plan)
 
     tolerance = {'protein': 10, 'fat': 10, 'carbs': 10}
-    if unsorted_plan is not None and is_within_tolerance(unsorted_plan, tolerance):
+    if unsorted_plan is not None and unsorted_plan.is_within_tolerance():
+        print(unsorted_plan.is_within_tolerance())
+        print(unsorted_plan.protein)
+        print(unsorted_plan.fat)
+        print(unsorted_plan.carbs)
+        print(unsorted_plan.carbohydrate_goal)
         sorted_plan = unsorted_plan.sort()
         print(sorted_plan)
         return sorted_plan
