@@ -46,24 +46,15 @@ class MealPlan:
                 f"{food.name:<{max_name_length}}\n"
             )
 
-        protein = 0
-        fat = 0
-        carbs = 0
-
-        for food in self.food:
-            protein += food.protein * self.amounts_dictionary[food.name]
-            fat += food.fat * self.amounts_dictionary[food.name]
-            carbs += food.carbs * self.amounts_dictionary[food.name]
-
         # Format the goals and totals for the macro nutrients
         macro_str = (
             "IST  : P {:3.0f}g F {:3.0f}g C {:3.0f}g\n"
             "SOLL : P {:3.0f}g F {:3.0f}g C {:3.0f}g\n"
             "I/S  : P {:3.0%} F {:3.0%} C {:3.0%}"
         ).format(
-            protein, fat, carbs,
+            self.protein, self.fat, self.carbs,
             self.protein_goal, self.fat_goal, self.carbohydrate_goal,
-            protein / self.protein_goal, fat / self.fat_goal, carbs / self.carbohydrate_goal
+            self.protein / self.protein_goal, self.fat / self.fat_goal, self.carbs / self.carbohydrate_goal
         )
 
         # Return the meal plan string and macro nutrient string

@@ -52,11 +52,18 @@ def main():
 
             # Testen des neuen Algorithmus
             start_time = time.time()
-            meal_plan_2 = optimized_generate_meal_plans(food_set, goal)
+            #meal_plan_2, counter_2 = optimized_generate_meal_plans(food_set, goal)
+            results = optimized_generate_meal_plans(food_set, goal)
+            if results is not None:
+                meal_plan_2 = results[0]
+                counter_2 = results[1]
+            else:
+                meal_plan_2 = None
+                counter_2 = 9999
             duration_2 = (time.time() - start_time) * 1000
             plan_found_2 = "Ja" if meal_plan_2 else "Nein"
             # Speichern der Ergebnisse im Arbeitsbuch für Algo 2
-            row = [food_set_name, food_set_count, goal[0], goal[1], goal[2], duration_2, "N/A", plan_found_2]
+            row = [food_set_name, food_set_count, goal[0], goal[1], goal[2], duration_2, counter_2, plan_found_2]
             sheet2.append(row)
 
     # Löschen des leeren ersten Sheets, das automatisch erstellt wird

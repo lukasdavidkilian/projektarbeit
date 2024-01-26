@@ -122,7 +122,7 @@ def iterative_selection(food_list, meal_plan: MealPlan):
 
         if is_within_tolerance(best_plan, tolerance):
             print(_)
-            return best_plan
+            return best_plan, _
 
     print(_)
     return None
@@ -259,15 +259,16 @@ def optimized_generate_meal_plans(food_list, goals):
     unsorted_plan = iterative_selection(food_list, meal_plan)
 
     tolerance = {'protein': 10, 'fat': 10, 'carbs': 10}
-    if unsorted_plan is not None and unsorted_plan.is_within_tolerance():
-        print(unsorted_plan.is_within_tolerance())
-        print(unsorted_plan.protein)
-        print(unsorted_plan.fat)
-        print(unsorted_plan.carbs)
-        print(unsorted_plan.carbohydrate_goal)
-        sorted_plan = unsorted_plan.sort()
+    if unsorted_plan is not None and unsorted_plan[0].is_within_tolerance():
+        counter = unsorted_plan[1]
+        print(unsorted_plan[0].is_within_tolerance())
+        print(unsorted_plan[0].protein)
+        print(unsorted_plan[0].fat)
+        print(unsorted_plan[0].carbs)
+        print(unsorted_plan[0].carbohydrate_goal)
+        sorted_plan = unsorted_plan[0].sort()
         print(sorted_plan)
-        return sorted_plan
+        return sorted_plan, counter
 
     return None
 
@@ -275,4 +276,4 @@ def optimized_generate_meal_plans(food_list, goals):
 # TODO: ggf. könnte man hier einfügen, dass man die iterative Selektion bspw. bis zu 5x durchläuft oder erneut sollte der erste Durchgang keinen optimalen Plan ergeben haben
 
 goals = [200, 75, 220]
-optimized_generate_meal_plans(nutrition_set_lukas, goals)
+#optimized_generate_meal_plans(nutrition_set_lukas, goals)
