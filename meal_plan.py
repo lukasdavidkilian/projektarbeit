@@ -14,7 +14,6 @@ class MealPlan:
     def __init__(self, food, protein_goal, fat_goal, carbohydrate_goal, amounts_dictionary):
         self.amounts_dictionary = amounts_dictionary
         self.food = food
-        #self.food = sorted(food, key=lambda item: item.protein * self.amounts_dictionary[item.name], reverse=True)
         self.protein_goal = protein_goal
         self.fat_goal = fat_goal
         self.carbohydrate_goal = carbohydrate_goal
@@ -22,31 +21,21 @@ class MealPlan:
         self.fat = sum(food.fat * self.amounts_dictionary[food.name] for food in self.food)
         self.carbs = sum(food.carbs * self.amounts_dictionary[food.name] for food in self.food)
         meal_plans.append(self)
-        #print(self)
-
-
 
     def __str__(self):
-        # Initialize a string for the meal plan
         meal_plan_str = ""
 
-        # Calculate the maximum length of the food names and units
-        # (to determine the width of the columns in the table)
         max_name_length = max(len(food.name) for food in self.food)
         max_unit_length = max(len(food.unit) for food in self.food)
 
-        # Loop over the foods in the meal plan
         for food in self.food:
-            # Calculate the daily amount of the food
             daily_amount = food.amount * self.amounts_dictionary[food.name]
 
-            # Format the food and its daily amount as a row in the table
             meal_plan_str += (
                 f"{daily_amount:>5.0f} {food.unit:<{max_unit_length}} "
                 f"{food.name:<{max_name_length}}\n"
             )
 
-        # Format the goals and totals for the macro nutrients
         macro_str = (
             "IST  : P {:3.0f}g F {:3.0f}g C {:3.0f}g\n"
             "SOLL : P {:3.0f}g F {:3.0f}g C {:3.0f}g\n"
@@ -57,7 +46,6 @@ class MealPlan:
             self.protein / self.protein_goal, self.fat / self.fat_goal, self.carbs / self.carbohydrate_goal
         )
 
-        # Return the meal plan string and macro nutrient string
         return f"\n{meal_plan_str}\n{macro_str}\n"
 
     def update_macros(self):
@@ -96,9 +84,6 @@ class MealPlan:
         return protein_deviation <= tolerance['protein'] and fat_deviation <= tolerance['fat'] and carbs_deviation <= \
             tolerance['carbs']
 
-    # TODO: sort function
     def sort(self):
         self.food = sorted(self.food, key=lambda item: item.protein * self.amounts_dictionary[item.name], reverse=True)
         return self
-
-
